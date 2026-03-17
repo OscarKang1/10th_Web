@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aido Navbar - BEM & Routing</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: sans-serif;
+      background-color: #fafafa;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background-color: #ffffff;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .navbar__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .navbar__logo-icon {
+      width: 30px;
+      height: 30px;
+      background-color: #ff6b6b;
+      border-radius: 8px;
+    }
+
+    .navbar__menu {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar__link {
+      text-decoration: none;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .navbar__actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      border: 2px solid #333;
+      border-radius: 20px;
+      padding: 2px;
+    }
+
+    .lang-toggle__btn {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 15px;
+    }
+
+    .lang-toggle__btn--active {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .navbar__button {
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .navbar__hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #333;
+    }
+
+    @media (max-width: 768px) {
+      .navbar__menu {
+        display: none;
+      }
+      .navbar__button {
+        display: none;
+      }
+      .navbar__hamburger {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="/" class="navbar__logo">
+      <div class="navbar__logo-icon"></div>
+      <span class="navbar__logo-text">Aido</span>
+    </a>
+    
+    <div class="navbar__menu">
+      <a href="#" class="navbar__link">고양이 친구들</a>
+    </div>
+    
+    <div class="navbar__actions">
+      <div class="lang-toggle">
+        <a href="#/ko" class="lang-toggle__btn" id="btn-ko">KO</a>
+        <a href="#/en" class="lang-toggle__btn" id="btn-en">EN</a>
+      </div>
+      <button class="navbar__button">출시 알림 받기</button>
+      <button class="navbar__hamburger">☰</button>
+    </div>
+  </nav>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const koBtn = document.getElementById('btn-ko');
+      const enBtn = document.getElementById('btn-en');
+      const currentUrl = window.location.href;
+
+      if (currentUrl.includes('/en') || currentUrl.includes('#/en')) {
+        enBtn.classList.add('lang-toggle__btn--active');
+      } else {
+        koBtn.classList.add('lang-toggle__btn--active');
+      }
+
+      koBtn.addEventListener('click', () => {
+        koBtn.classList.add('lang-toggle__btn--active');
+        enBtn.classList.remove('lang-toggle__btn--active');
+      });
+
+      enBtn.addEventListener('click', () => {
+        enBtn.classList.add('lang-toggle__btn--active');
+        koBtn.classList.remove('lang-toggle__btn--active');
+      });
+    });
+  </script>
+
+</body>
+</html>
