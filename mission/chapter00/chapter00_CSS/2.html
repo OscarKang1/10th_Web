@@ -10,6 +10,7 @@
       margin: 0;
       padding: 0;
     }
+
     body {
       font-family: sans-serif;
       display: flex;
@@ -26,54 +27,70 @@
       letter-spacing: 1px;
     }
 
+    
     .top-row {
       display: flex;
       height: 10vh;
     }
+
     .header-box {
       flex: 1;
       background-color: #1f2c46;
       color: white;
     }
+
     .menu-box {
       flex: 3;
       background-color: #c93e54;
       color: white;
     }
 
+    
     .hero-box {
       height: 35vh;
       background-color: #4b7bc4;
       color: white;
     }
 
+  
     .middle-row {
       display: grid;
+
       grid-template-columns: 2fr 1fr 1fr;
+
       height: 40vh;
     }
+
     .main-box {
       background-color: #273756;
       color: white;
+
+      
+      grid-column: 1 / 2;
     }
-    .empty-space {
-    }
-    
+
+  
     .right-col {
       display: flex;
       flex-direction: column;
+
+    
+      grid-column: 3 / 4;
     }
+
     .image-box {
       flex: 1;
       background-color: #afd5df;
       color: black;
     }
+
     .extra-box {
       flex: 1;
       background-color: #55b28d;
       color: black;
     }
 
+   
     .banner-box {
       height: 15vh;
       background-color: #e0c268;
@@ -81,18 +98,30 @@
     }
 
     @media (max-width: 768px) {
-      .top-row { flex-direction: column; height: auto; }
-      .header-box, .menu-box { padding: 20px 0; }
-      
-      .middle-row { 
+      .top-row {
+        flex-direction: column;
+        height: auto;
+      }
+
+      .header-box,
+      .menu-box {
+        padding: 20px 0;
+      }
+
+      .middle-row {
         grid-template-columns: 1fr;
         height: auto;
       }
-      .main-box, .image-box, .extra-box { height: 200px; }
-      .empty-space { display: none; }
+
+      .main-box,
+      .image-box,
+      .extra-box {
+        height: 200px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header class="top-row">
@@ -104,7 +133,7 @@
 
   <main class="middle-row">
     <div class="box main-box">MAIN</div>
-    <div class="empty-space"></div>
+
     <aside class="right-col">
       <div class="box image-box">IMAGE</div>
       <div class="box extra-box">EXTRA</div>
