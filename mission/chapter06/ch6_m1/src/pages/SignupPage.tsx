@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { signUp } from '../api/authApi';
+import { signUp, signIn } from '../api/authApi';
+import { useAuth } from '../context/AuthContext';
 
 const signupSchema = z
   .object({
@@ -27,6 +28,7 @@ function SignupPage() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
@@ -58,9 +60,13 @@ function SignupPage() {
       await signUp({
         email: data.email,
         password: data.password,
+        passwordCheck: data.confirmPassword,
         name: data.nickname,
       });
-      navigate('/login');
+      // 회원가입 후 자동 로그인 (signup API는 토큰 미반환)
+      const loginResult = await signIn({ email: data.email, password: data.password });
+      login(loginResult.accessToken, loginResult.refreshToken, loginResult.name);
+      navigate('/');
     } catch (err) {
       setApiError(err instanceof Error ? err.message : '회원가입에 실패했습니다.');
     } finally {

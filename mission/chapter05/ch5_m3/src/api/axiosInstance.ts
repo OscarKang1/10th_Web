@@ -27,13 +27,12 @@ const refreshAccessToken = async (): Promise<string> => {
   if (!refreshToken) throw new Error('No refresh token');
 
   const { data } = await axios.post(
-    `${BASE_URL}/v1/auth/token/access`,
-    {},
-    { headers: { Authorization: `Bearer ${refreshToken}` } }
+    `${BASE_URL}/v1/auth/refresh`,
+    { refresh: refreshToken }
   );
 
-  const newAccessToken: string = data.accessToken;
-  const newRefreshToken: string | undefined = data.refreshToken;
+  const newAccessToken: string = data.data.accessToken;
+  const newRefreshToken: string | undefined = data.data.refreshToken;
 
   setStoredToken('accessToken', newAccessToken);
   if (newRefreshToken) {

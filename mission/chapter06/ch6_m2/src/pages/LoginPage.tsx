@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { flushSync } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { signIn } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const loginSchema = z.object({
   email: z
@@ -24,9 +23,11 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState('');
+  const from = (location.state as { from?: string } | null)?.from ?? '/';
 
   const {
     register,
@@ -42,10 +43,8 @@ function LoginPage() {
     setApiError('');
     try {
       const result = await signIn({ email: data.email, password: data.password });
-      flushSync(() => {
-        login(result.accessToken, result.refreshToken);
-      });
-      navigate('/');
+      login(result.accessToken, result.refreshToken, result.name);
+      navigate(from, { replace: true });
     } catch (err) {
       setApiError(err instanceof Error ? err.message : '로그인에 실패했습니다.');
     } finally {
@@ -119,12 +118,12 @@ function LoginPage() {
 
           <button
             type="submit"
-            className={`w-full py-3 border-none rounded-md text-[0.9375rem] font-semibold cursor-pointer transition-colors mt-1 ${
-              isValid && !isLoading
-                ? 'bg-[#3a3a3a] text-white hover:bg-[#4a4a4a]'
-                : 'bg-[#222] text-[#555] cursor-not-allowed'
+            className={`w-full py-3 border-none rounded-md text-[0.9375rem] font-semibold transition-colors mt-1 ${
+              isLoading
+                ? 'bg-[#222] text-[#555] cursor-not-allowed'
+                : 'bg-[#3a3a3a] text-white hover:bg-[#4a4a4a] cursor-pointer'
             }`}
-            disabled={!isValid || isLoading}
+            disabled={isLoading}
           >
             {isLoading ? '로그인 중...' : '로그인'}
           </button>

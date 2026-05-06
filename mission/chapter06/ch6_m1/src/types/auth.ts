@@ -13,5 +13,6 @@ export interface SignInResponse {
 export interface SignUpRequest {
   email: string;
   password: string;
+  passwordCheck: string;
   name: string;
 }

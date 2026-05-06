@@ -1,0 +1,124 @@
+/* ── 레이아웃 ─────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 1.5rem;
+  gap: 2.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── 버튼 컨트롤 ──────────────────────────── */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controls button {
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+  border: 2px solid #646cff;
+  background: #646cff;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.controls button:hover { opacity: 0.85; }
+
+/* 404 에러 버튼 */
+.btn-error {
+  border-color: #f59e0b !important;
+  background: transparent !important;
+  color: #f59e0b !important;
+}
+
+.btn-error-active {
+  border-color: #f59e0b !important;
+  background: #f59e0b !important;
+  color: #000 !important;
+}
+
+/* ── 유저 카드 ────────────────────────────── */
+.user-card {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0;
+}
+
+.user-email {
+  font-size: 1rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.user-id {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* 상태 카드 (로딩, 에러, 언마운트) */
+.state-card {
+  font-size: 1rem;
+  color: #888;
+  min-height: 140px;
+  justify-content: center;
+  line-height: 1.8;
+}
+
+.state-card span {
+  font-size: 0.82rem;
+  color: #555;
+}
+
+.error-state {
+  color: #f87171;
+}
+
+.error-state .retry-info {
+  font-size: 0.82rem;
+  color: #888;
+  margin: 0.3rem 0 0;
+}
+
+.unmounted {
+  border-style: dashed;
+}
+
+/* ── 소스 뱃지 ───────────────────────────── */
+.source-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.source-badge.cache   { background: #052e16; color: #4ade80; }
+.source-badge.network { background: #0c1a3a; color: #60a5fa; }
+
+.refreshing {
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0;
+}
