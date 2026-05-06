@@ -133,3 +133,5 @@ Q2 답변. 바로 보인다.
 SVGR (컴포넌트),<IconComponent/>,"CSS 스타일링 자유로움, Props 전달 가능","JS 번들 크기 증가, 많은 아이콘 시 성능 저하"
 Raw Import (?raw),string 데이터,SVG 코드를 직접 문자열로 처리 가능,수동으로 DOM에 주입(dangerouslySetInnerHTML) 필요
 
+
+이런 젠장!
