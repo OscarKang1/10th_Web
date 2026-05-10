@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { getLps } from '../api/lpApi';
 import type { SortOrder } from '../types/lp';
@@ -29,21 +29,22 @@ export default function HomePage() {
 
   const lps = data?.pages.flatMap((page) => page.data) ?? [];
 
+  const onIntersect = useCallback(
+    ([entry]: IntersectionObserverEntry[]) => {
+      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [hasNextPage, isFetchingNextPage, fetchNextPage],
+  );
+
   useEffect(() => {
     const el = sentinelRef.current;
     if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { threshold: 0.1 },
-    );
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.1 });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [onIntersect]);
 
   return (
     <div className="p-6 pb-20">

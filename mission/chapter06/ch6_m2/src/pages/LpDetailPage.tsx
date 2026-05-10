@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { getLpById, getComments, postComment } from '../api/lpApi';
 import type { SortOrder } from '../types/lp';
 import { DetailSkeleton, CommentSkeleton, ErrorState } from '../components/Skeleton';
@@ -14,7 +14,6 @@ export default function LpDetailPage() {
 
   const [commentOrder, setCommentOrder] = useState<SortOrder>('desc');
   const [commentInput, setCommentInput] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const commentSentinelRef = useRef<HTMLDivElement>(null);
 
   const { data: lp, isLoading, isError, refetch } = useQuery({
@@ -42,37 +41,36 @@ export default function LpDetailPage() {
 
   const comments = commentData?.pages.flatMap((p) => p.data) ?? [];
 
+  const onCommentIntersect = useCallback(
+    ([entry]: IntersectionObserverEntry[]) => {
+      if (entry.isIntersecting && hasMoreComments && !isFetchingMoreComments) {
+        fetchMoreComments();
+      }
+    },
+    [hasMoreComments, isFetchingMoreComments, fetchMoreComments],
+  );
+
   useEffect(() => {
     const el = commentSentinelRef.current;
     if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMoreComments && !isFetchingMoreComments) {
-          fetchMoreComments();
-        }
-      },
-      { threshold: 0.1 },
-    );
+    const observer = new IntersectionObserver(onCommentIntersect, { threshold: 0.1 });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [hasMoreComments, isFetchingMoreComments, fetchMoreComments]);
+  }, [onCommentIntersect]);
 
-  async function handleSubmitComment(e: React.FormEvent) {
+  const { mutate: submitComment, isPending: isSubmitting } = useMutation({
+    mutationFn: (content: string) => postComment(Number(lpId), content),
+    onSuccess: () => {
+      setCommentInput('');
+      queryClient.invalidateQueries({ queryKey: ['lpComments', lpId, commentOrder] });
+    },
+  });
+
+  function handleSubmitComment(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = commentInput.trim();
-    if (!trimmed || !lpId || isSubmitting) return;
-
-    setIsSubmitting(true);
-    try {
-      await postComment(Number(lpId), trimmed, accessToken);
-      setCommentInput('');
-      await queryClient.invalidateQueries({ queryKey: ['lpComments', lpId, commentOrder] });
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
+    if (!trimmed || !lpId) return;
+    submitComment(trimmed);
   }
 
   if (isLoading) return <DetailSkeleton />;
