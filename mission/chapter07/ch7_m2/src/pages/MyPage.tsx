@@ -141,9 +141,7 @@ export default function MyPage() {
       setEditError(err.message || '프로필 수정에 실패했습니다.');
     },
 
-    onSuccess: (updated) => {
-      // 서버 확정값으로 최종 반영
-      if (updated.name) updateUserName(updated.name);
+    onSuccess: () => {
       setIsEditing(false);
       setEditAvatarFile(null);
       setPreviewAvatar('');

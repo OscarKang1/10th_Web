@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createLp, updateLp } from '../api/lpApi';
 import { uploadImage } from '../api/userApi';
@@ -50,6 +50,13 @@ export default function CreateLpModal({ onClose, initialLp }: CreateLpModalProps
       setError(err.message || '요청에 실패했습니다.');
     },
   });
+
+  useEffect(() => {
+    if (!previewUrl.startsWith('blob:')) return;
+    return () => {
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
